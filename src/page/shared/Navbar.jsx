@@ -1,30 +1,41 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../Providers/AuthProvider";
+import { FaShoppingCart } from "react-icons/fa";
+import useCart from "../../hooks/useCart";
 
 const Navbar = () => {
   const { user, logoutUser } = useContext(AuthContext);
+  const [cart] = useCart();
   const handleLogOut = () => {
     logoutUser().then();
   };
   const navLinks = (
     <>
       <li>
-        <NavLink to="/">Home</NavLink>
+        <Link to="/">Home</Link>
       </li>
       <li>
-        <NavLink to="/menu">Our Menu</NavLink>
+        <Link to="/menu">Our Menu</Link>
       </li>
       <li>
-        <NavLink to="/order/salad">Order Food</NavLink>
+        <Link to="/order/salad">Order Food</Link>
       </li>
 
       <li>
-        <NavLink to="/signup">Sign Up</NavLink>
+        <Link to="/dashboard/cart">
+          <button className="btn">
+            <FaShoppingCart className="mr-1 text-xl"></FaShoppingCart>
+            <div className="badge badge-secondary">+{cart.length}</div>
+          </button>
+        </Link>
+      </li>
+      <li>
+        <Link to="/signup">Sign Up</Link>
       </li>
       {user ? (
         <>
-          <span>{user.displayName}</span>
+          {/* <span>{user.displayName}</span> */}
           <button onClick={handleLogOut} className="btn btn-ghost">
             Log Out
           </button>
@@ -33,14 +44,14 @@ const Navbar = () => {
         <>
           {" "}
           <li>
-            <NavLink to="/login">Login</NavLink>
+            <Link to="/login">Login</Link>
           </li>
         </>
       )}
     </>
   );
   return (
-    <div className="navbar max-w-screen-xl fixed z-10 opacity-30 bg-black text-white ">
+    <div className="navbar fixed z-10 bg-opacity-30 max-w-screen-xl bg-black text-white">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost md:hidden">
