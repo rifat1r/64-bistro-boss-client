@@ -3,9 +3,12 @@ import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../Providers/AuthProvider";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import SocialLogin from "../../components/SocialLogin/SocialLogin";
 
 const SignUp = () => {
+  const axiosPublic = useAxiosPublic();
   const { createUser, updateUserProfile } = useContext(AuthContext);
   const navigate = useNavigate("");
   const {
@@ -23,15 +26,25 @@ const SignUp = () => {
         updateUserProfile(data.name, data.photoURL)
           .then(() => {
             console.log("user profile info updated");
-            reset();
-            Swal.fire({
-              position: "top-center",
-              icon: "success",
-              title: "User created Successfully",
-              showConfirmButton: false,
-              timer: 1500,
+
+            const userInfo = {
+              name: data.name,
+              email: data.email,
+            };
+            axiosPublic.post("/users", userInfo).then((res) => {
+              if (res.data.insertedId) {
+                console.log("user added to the database");
+                reset();
+                Swal.fire({
+                  position: "top-center",
+                  icon: "success",
+                  title: "User created Successfully",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+                navigate("/");
+              }
             });
-            navigate("/");
           })
           .catch((error) => console.log(error));
       })
@@ -93,7 +106,6 @@ const SignUp = () => {
                   {...register("email", { required: true })}
                   placeholder="email"
                   className="input input-bordered"
-                  required
                 />
                 {errors.email && (
                   <span className="text-xl text-red-500">
@@ -115,7 +127,6 @@ const SignUp = () => {
                   })}
                   placeholder="password"
                   className="input input-bordered"
-                  required
                 />
                 {errors.password?.type === "required" && (
                   <p className="text-red-500">Password is required</p>
@@ -130,8 +141,8 @@ const SignUp = () => {
                 )}
                 {errors.password?.type === "pattern" && (
                   <p className="text-red-500">
-                    Password must one uppercase ,one lower case and one special
-                    character
+                    Password must contain one uppercase ,one lower case , one
+                    special character and a number
                   </p>
                 )}
               </div>
@@ -139,6 +150,10 @@ const SignUp = () => {
                 <button className="btn btn-primary">Sign Up</button>
               </div>
             </form>
+            <p className="text-center">
+              Already have an account ? <Link to="/login">Login</Link>
+            </p>
+            <SocialLogin></SocialLogin>
           </div>
         </div>
       </div>

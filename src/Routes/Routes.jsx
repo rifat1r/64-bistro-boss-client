@@ -5,8 +5,10 @@ import Menu from "../page/Menu/Menu/Menu";
 import Order from "../page/order/Order/Order";
 import Login from "../page/Login/Login";
 import SignUp from "../page/SignUp/SignUp";
-import DashBoard from "../Layout/DashBoard";
 import Cart from "../page/DashBoard/Cart/Cart";
+import PrivateRoutes from "./PrivateRoutes";
+import DashBoard from "../Layout/Dashboard/DashBoard";
+import AllUsers from "../page/DashBoard/AllUsers/AllUsers";
 
 const router = createBrowserRouter([
   {
@@ -37,11 +39,20 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashBoard></DashBoard>,
+    element: (
+      <PrivateRoutes>
+        <DashBoard></DashBoard>
+      </PrivateRoutes>
+    ),
     children: [
       {
         path: "cart",
         element: <Cart></Cart>,
+      },
+      // admin routes
+      {
+        path: "allusers",
+        element: <AllUsers></AllUsers>,
       },
     ],
   },
