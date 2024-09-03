@@ -9,6 +9,12 @@ import Cart from "../page/DashBoard/Cart/Cart";
 import PrivateRoutes from "./PrivateRoutes";
 import DashBoard from "../Layout/Dashboard/DashBoard";
 import AllUsers from "../page/DashBoard/AllUsers/AllUsers";
+import AddItems from "../page/DashBoard/AddItems/AddItems";
+import AdminRoute from "../Routes/AdminRoute";
+import ManageItems from "../page/DashBoard/ManageItems/ManageItems";
+import UpdateItem from "../page/DashBoard/UpdateItem/UpdateItem";
+import Payment from "../page/DashBoard/Payment/Payment";
+import PaymentHistory from "../page/DashBoard/PaymentHistory/PaymentHistory";
 
 const router = createBrowserRouter([
   {
@@ -45,14 +51,53 @@ const router = createBrowserRouter([
       </PrivateRoutes>
     ),
     children: [
+      //normal users routes
       {
         path: "cart",
         element: <Cart></Cart>,
       },
-      // admin routes
+      {
+        path: "payment",
+        element: <Payment></Payment>,
+      },
+      {
+        path: "paymentHistory",
+        element: <PaymentHistory></PaymentHistory>,
+      },
+      // admin only routes
       {
         path: "allusers",
-        element: <AllUsers></AllUsers>,
+        element: (
+          <AdminRoute>
+            <AllUsers></AllUsers>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "additems",
+        element: (
+          <AdminRoute>
+            <AddItems></AddItems>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "manageitems",
+        element: (
+          <AdminRoute>
+            <ManageItems></ManageItems>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "updateItem/:id",
+        element: (
+          <AdminRoute>
+            <UpdateItem></UpdateItem>
+          </AdminRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:5001/menu/${params.id}`),
       },
     ],
   },
