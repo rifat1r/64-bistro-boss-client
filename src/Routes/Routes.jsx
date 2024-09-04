@@ -15,6 +15,8 @@ import ManageItems from "../page/DashBoard/ManageItems/ManageItems";
 import UpdateItem from "../page/DashBoard/UpdateItem/UpdateItem";
 import Payment from "../page/DashBoard/Payment/Payment";
 import PaymentHistory from "../page/DashBoard/PaymentHistory/PaymentHistory";
+import AdminHome from "../page/DashBoard/AdminHome/AdminHome";
+import UserHome from "../page/DashBoard/UserHome/UserHome";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +54,10 @@ const router = createBrowserRouter([
     ),
     children: [
       //normal users routes
+      {
+        path: "userHome",
+        element: <UserHome></UserHome>,
+      },
       {
         path: "cart",
         element: <Cart></Cart>,
@@ -97,7 +103,17 @@ const router = createBrowserRouter([
           </AdminRoute>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5001/menu/${params.id}`),
+          fetch(
+            `https://65-bistro-boss-server-gamma.vercel.app/menu/${params.id}`
+          ),
+      },
+      {
+        path: "adminHome",
+        element: (
+          <AdminRoute>
+            <AdminHome></AdminHome>
+          </AdminRoute>
+        ),
       },
     ],
   },

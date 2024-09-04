@@ -7,5 +7,4 @@
  * 6. from client side get the client secret and save it.
  * 7 use confirm card payment and pass user  information,card and client secret
  * 8. display transaction id
- *
  * */

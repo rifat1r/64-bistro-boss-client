@@ -19,9 +19,11 @@ const AuthProvider = ({ children }) => {
   const gooogleProvider = new GoogleAuthProvider();
   const axiosPublic = useAxiosPublic();
   const createUser = (email, password) => {
+    setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
   const loginUser = (email, password) => {
+    setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
@@ -44,6 +46,8 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
+        console.log("currentUSer", currentUser);
+
         //get token and store client
         const userInfo = {
           email: currentUser.email,
@@ -51,14 +55,14 @@ const AuthProvider = ({ children }) => {
         axiosPublic.post("/jwt", userInfo).then((res) => {
           if (res.data.token) {
             localStorage.setItem("access-token", res.data.token);
+            setLoading(false);
           }
         });
       } else {
         // TODO: remove token (if token stored in the client side)
         localStorage.removeItem("access-token");
+        setLoading(false);
       }
-      console.log("currentUSer", currentUser);
-      setLoading(false);
     });
     return () => {
       return unsubscribe();

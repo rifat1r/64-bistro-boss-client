@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
 
 export const axiosSecure = axios.create({
-  baseURL: "http://localhost:5001",
+  baseURL: "https://65-bistro-boss-server-gamma.vercel.app",
 });
 
 const useAxiosSecure = () => {
@@ -13,7 +13,7 @@ const useAxiosSecure = () => {
   axiosSecure.interceptors.request.use(
     function (config) {
       const token = localStorage.getItem("access-token");
-      // console.log("request stopped by interceptors", token);
+      console.log("request stopped by interceptors before adding token", token);
       config.headers.authorization = `Bearer ${token}`;
       return config;
     },
